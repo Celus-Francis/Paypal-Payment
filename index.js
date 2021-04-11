@@ -4,9 +4,9 @@ const paypal = require("paypal-rest-sdk");
 paypal.configure({
   mode: "sandbox", //sandbox or live
   client_id:
-    "Ae_ov3mf2njnswabSB2byvtaOWPV_9kT48_DamGjAy0H6PvJEnAol3ZAq_dvVtNFvkwzGCJ2qrCLwnpL",
+    "AXgKmTzUYtlaE-bbP389QVtQVf27OjCFiJWVVwPLOZgwEyfjbmGHBzqVs9b1wo-gMJoxrdpucRTVQGCF",
   client_secret:
-    "EN3adU7f5mea_riJhKVaNl-YafDwLBkhYIKi4LqHNTkTQaee12W1bxIrH1TPNg35vaPYEnF5dfDmqyvw",
+    "EP-rfUXcqBTLR9R5LyhtAO4eS17fBzhyicafRRPclKoFZuPOCQKPRF4DCWLC46HI8f4rfRxlnEjljYfC",
 });
 
 const PORT = process.env.PORT || 3000;
@@ -21,18 +21,20 @@ app.post("/pay", (req, res) => {
     payer: {
       payment_method: "paypal",
     },
-    "redirect_urls": {
-      "return_url": "https://payment-paypal.herokuapp.com//success",
-      "cancel_url": "https://payment-paypal.herokuapp.com//cancel"
-  },
+    redirect_urls: {
+      return_url: "https://paypalnode.herokuapp.com/success",
+      cancel_url: "https://paypalnode.herokuapp.com/cancel",
+    },
     transactions: [
       {
         item_list: {
           items: [
             {
-              name: "Donation",
+              name: "Red Sox Hat",
               sku: "001",
+              price: "5.00",
               currency: "USD",
+              quantity: 1,
             },
           ],
         },
@@ -40,7 +42,7 @@ app.post("/pay", (req, res) => {
           currency: "USD",
           total: "5.00",
         },
-        description: "Donate for the best team ever",
+        description: "Hat for the best team ever",
       },
     ],
   };
@@ -84,7 +86,6 @@ app.get("/success", (req, res) => {
     } else {
       console.log(JSON.stringify(payment));
       res.send("Success");
-      res.send_email = "True";
     }
   });
 });
